@@ -5,7 +5,9 @@ import com.example.sistemaBiblioteca.dto.emprestimo.CriacaoEmprestimoRespostaDto
 import com.example.sistemaBiblioteca.dto.usuario.CriacaoUsuarioRequisicaoDto;
 import com.example.sistemaBiblioteca.dto.usuario.CriacaoUsuarioRespostaDto;
 import com.example.sistemaBiblioteca.model.Usuario;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UsuarioMapper {
 
 

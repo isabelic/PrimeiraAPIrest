@@ -65,7 +65,7 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> atualizarUsuario(
+    public ResponseEntity<CriacaoUsuarioRespostaDto> atualizarUsuario(
             @PathVariable int id,
             @RequestBody Usuario usuario
     ){
@@ -87,7 +87,7 @@ public class UsuarioController {
         try{
             return ResponseEntity.status(HttpStatus.NO_CONTENT)
                     .build();
-        }catch (SQLException e){
+        }catch (Exception e){
             e.printStackTrace();
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

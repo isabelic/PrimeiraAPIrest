@@ -96,4 +96,28 @@ public List<Usuario> buscarTodosUsuarios() throws SQLException{
             stmt.executeUpdate();
         }
     }
+
+
+
+    public boolean usuarioNaoExiste(int id ){
+
+        String query = "SELECT nome FROM Usuario WHERE id = ? ";
+
+        try(Connection conn = Conexao.conectar();
+        PreparedStatement st = conn.prepareStatement(query)){
+
+            st.setInt(1,id);
+
+            ResultSet rt = st.executeQuery();
+
+            if(rt.next()){
+                return true;
+            }
+
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+            return false;
+    }
 }
