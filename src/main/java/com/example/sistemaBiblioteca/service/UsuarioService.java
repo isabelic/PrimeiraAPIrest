@@ -10,6 +10,7 @@ import com.example.sistemaBiblioteca.repository.UsuarioDAO;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -27,12 +28,30 @@ public class UsuarioService {
         return mapper.paraRespostaDto(repository.inserirUsuario(mapper.paraEntidade(requisicaoDto)));
     }
 
-    public List<Usuario> listarUsuarios() throws SQLException{
-        return repository.buscarTodosUsuarios();
+    public List<CriacaoUsuarioRespostaDto> listarUsuarios() throws SQLException{
+
+        return repository.buscarTodosUsuarios().stream()
+                .map(mapper::paraRespostaDto)
+                .toList();
+      /* List<Usuario> usuarios = repository.buscarTodosUsuarios();  // lista comum
+
+       List<CriacaoUsuarioRespostaDto> respostasDtos = new ArrayList<>(); // lista para reposta -> armazena p/ retorna
+
+       usuarios.forEach(usuario -> {
+           respostasDtos.add(mapper.paraRespostaDto(usuario));
+       });
+       return  respostasDtos;*/
     }
 
-    public Usuario listarUsuarioPorId(int id) throws SQLException{
-        return repository.buscarUsuarioPorID(id);
+    public CriacaoUsuarioRespostaDto listarUsuarioPorId(int id) throws SQLException{
+       Usuario usuario = repository.buscarUsuarioPorID(id);
+
+       if(usuario.getId() == 0){
+           throw new RuntimeException("id do usuário não existe!");
+       }else{
+           return mapper.paraRespostaDto(repository.buscarUsuarioPorID(id));
+       }
+
     }
 
     public Usuario atualizarUsuario(int id, Usuario usuario) throws SQLException{

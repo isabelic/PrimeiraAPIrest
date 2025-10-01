@@ -44,22 +44,24 @@ public class UsuarioController {
         List<Usuario> usuarios =new ArrayList<>();
 
         try{
-            usuarios = service.listarUsuarios();
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(service.listarUsuarios());
         }catch (SQLException e){
             e.printStackTrace();
         }
-        return ResponseEntity.status(HttpStatus.OK).body(usuarios);
+       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> buscarUsuarioPorID(@PathVariable int id){
+    public ResponseEntity<CriacaoUsuarioRespostaDto> buscarUsuarioPorID(@PathVariable int id){
         Usuario newUsuario = new Usuario();
         try{
-            newUsuario = service.listarUsuarioPorId(id);
+           return ResponseEntity.status(HttpStatus.OK)
+                   .body(service.listarUsuarioPorId(id));
         }catch (SQLException e){
             e.printStackTrace();
         }
-        return ResponseEntity.status(HttpStatus.OK).body(newUsuario);
+        return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
     @PutMapping("/{id}")
@@ -69,11 +71,12 @@ public class UsuarioController {
     ){
         Usuario newUsuario = new Usuario();
         try{
-            newUsuario = service.atualizarUsuario(id, usuario);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(service.atualizarUsuario(id,usuario));
         }catch (SQLException e){
             e.printStackTrace();
         }
-        return ResponseEntity.status(HttpStatus.OK).body(newUsuario);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
     @DeleteMapping("/{id}")
@@ -82,11 +85,11 @@ public class UsuarioController {
         ){
         Usuario newUsuario = new Usuario();
         try{
-            newUsuario = service.deletarUsuario(id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                    .build();
         }catch (SQLException e){
             e.printStackTrace();
         }
-        return ResponseEntity.status(HttpStatus.NO_CONTENT)
-                .build();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 }
