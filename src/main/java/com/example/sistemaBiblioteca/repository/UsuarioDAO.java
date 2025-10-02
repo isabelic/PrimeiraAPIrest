@@ -73,6 +73,24 @@ public List<Usuario> buscarTodosUsuarios() throws SQLException{
         return new Usuario(newID, nome, email);
     }
 
+
+    public boolean usuarioExistePorID(int id) throws  SQLException{
+        String  sql = "SELECT id FROM usuario WHERE id = ?";
+
+
+        try(Connection conn = Conexao.conectar();
+        PreparedStatement st = conn.prepareStatement(sql)){
+            st.setInt(1,id);
+
+             ResultSet rt = st.executeQuery();
+
+
+             if(rt.next()){
+                 return true;
+             }
+        }
+        return  false;
+    }
     public void atualizarUsuario(Usuario usuario) throws SQLException{
         String query = "UPDATE usuario SET nome = ?, email = ? WHERE id = ?";
 
@@ -101,7 +119,7 @@ public List<Usuario> buscarTodosUsuarios() throws SQLException{
 
     public boolean usuarioNaoExiste(int id ){
 
-        String query = "SELECT nome FROM Usuario WHERE id = ? ";
+        String query = "SELECT nome FROM usuario WHERE id = ? ";
 
         try(Connection conn = Conexao.conectar();
         PreparedStatement st = conn.prepareStatement(query)){

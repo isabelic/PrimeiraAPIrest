@@ -100,4 +100,23 @@ public class LivroDAO {
             stmt.executeUpdate();
         }
     }
+
+    public boolean livroNaoExiste(int id){
+        String sql ="SELECT titulo FROM livro WHERE id = ?";
+
+        try(Connection conn = Conexao.conectar();
+        PreparedStatement st = conn.prepareStatement(sql)){
+
+            st.setInt(1,id);
+
+            ResultSet rt = st.executeQuery();
+
+            if(rt.next()){
+                return true;
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

@@ -54,17 +54,17 @@ public class UsuarioService {
 
     }
 
-    public CriacaoUsuarioRespostaDto atualizarUsuario(int id, Usuario usuario) throws SQLException{
-        List<Usuario> usuarios = repository.buscarTodosUsuarios();
+    public CriacaoUsuarioRespostaDto atualizarUsuario(int id, CriacaoUsuarioRequisicaoDto requisicaoDto) throws SQLException{
+      Usuario usuario = repository.buscarUsuarioPorID(id);
 
-        for(Usuario u : usuarios){
-            if(u.getId() == id){
-                usuario.setId(id);
-                repository.atualizarUsuario(usuario);
-                return mapper.paraRespostaDto(usuario);
-            }
+
+        if (usuario == null) {
+            throw  new RuntimeException("O usuário não existe!");
+
         }
-        throw new RuntimeException("ID do usuário não existe!");
+        Usuario novoUsuario = mapper.paraUpdate(requisicaoDto,usuario);
+        repository.atualizarUsuario(novoUsuario);
+        return mapper.paraRespostaDto(novoUsuario);
     }
 
     public void deletarUsuario(int id) throws SQLException{

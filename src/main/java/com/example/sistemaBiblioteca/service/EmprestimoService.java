@@ -1,5 +1,8 @@
 package com.example.sistemaBiblioteca.service;
 
+import com.example.sistemaBiblioteca.dto.emprestimo.CriacaoEmprestimoRequisicaoDto;
+import com.example.sistemaBiblioteca.dto.emprestimo.CriacaoEmprestimoRespostaDto;
+import com.example.sistemaBiblioteca.mapper.EmprestimoMapper;
 import com.example.sistemaBiblioteca.model.Emprestimo;
 import com.example.sistemaBiblioteca.model.Usuario;
 import com.example.sistemaBiblioteca.repository.EmprestimoDAO;
@@ -12,13 +15,16 @@ import java.util.List;
 public class EmprestimoService {
 
     private final EmprestimoDAO repository;
+    private final EmprestimoMapper mapper;
 
-    public EmprestimoService(EmprestimoDAO repository) {
+    public EmprestimoService(EmprestimoDAO repository, EmprestimoMapper mapper) {
+        this.mapper = mapper;
+
         this.repository = repository;
     }
 
-    public Emprestimo criarEmprestimo(Emprestimo emprestimo) throws SQLException {
-        return repository.inserirEmprestimo(emprestimo);
+    public CriacaoEmprestimoRespostaDto criarEmprestimo(CriacaoEmprestimoRequisicaoDto requisicaoDto) throws SQLException {
+        return mapper.paraEmprestimoDto(repository.inserirEmprestimo(mapper.paraEntidade(requisicaoDto)));
     }
 
     public List<Emprestimo> listarEmprestimo() throws SQLException{

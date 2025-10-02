@@ -1,5 +1,8 @@
 package com.example.sistemaBiblioteca.controller;
 
+import com.example.sistemaBiblioteca.dto.emprestimo.CriacaoEmprestimoRequisicaoDto;
+import com.example.sistemaBiblioteca.dto.emprestimo.CriacaoEmprestimoRespostaDto;
+import com.example.sistemaBiblioteca.dto.usuario.CriacaoUsuarioRequisicaoDto;
 import com.example.sistemaBiblioteca.model.Emprestimo;
 import com.example.sistemaBiblioteca.model.Usuario;
 import com.example.sistemaBiblioteca.service.EmprestimoService;
@@ -24,16 +27,17 @@ public class EmprestimoController {
     }
 
     @PostMapping
-    public ResponseEntity<Emprestimo> criarEmprestimo(
-            @RequestBody Emprestimo emprestimo
-    ){
+    public ResponseEntity<CriacaoEmprestimoRespostaDto> criarEmprestimo(
+            @RequestBody CriacaoEmprestimoRequisicaoDto requisicaoDto
+            ){
         Emprestimo newEmprestimo = new Emprestimo();
         try{
-            newEmprestimo = service.criarEmprestimo(emprestimo);
+           return ResponseEntity.status(HttpStatus.CREATED)
+                   .body(service.criarEmprestimo(requisicaoDto));
         }catch (SQLException e){
             e.printStackTrace();
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(newEmprestimo);
+       return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
     @GetMapping

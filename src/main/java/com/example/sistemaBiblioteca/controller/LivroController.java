@@ -1,5 +1,7 @@
 package com.example.sistemaBiblioteca.controller;
 
+import com.example.sistemaBiblioteca.dto.livro.CriacaoLivroRequisicaoDto;
+import com.example.sistemaBiblioteca.dto.livro.CriacaoLivroRespostaDto;
 import com.example.sistemaBiblioteca.model.Livro;
 import com.example.sistemaBiblioteca.model.Usuario;
 import com.example.sistemaBiblioteca.service.LivroService;
@@ -23,60 +25,68 @@ public class LivroController {
         }
 
         @PostMapping
-        public ResponseEntity<Livro> criarLivro(
-                @RequestBody Livro livro
-        ){
+        public ResponseEntity<CriacaoLivroRespostaDto> criarLivro(
+                @RequestBody CriacaoLivroRequisicaoDto requisicaoDto
+                ){
             Livro newUser = new Livro();
             try{
-                newUser = service.criarLivro(livro);
+                return  ResponseEntity.status(HttpStatus.CREATED)
+                        .body(service.criarLivro(requisicaoDto));
             }catch (SQLException e){
                 e.printStackTrace();
-            }
-            return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
         }
 
         @GetMapping
-        public ResponseEntity<List<Livro>> buscarTodosLivros(){
+        public ResponseEntity<List<CriacaoLivroRespostaDto>> buscarTodosLivros(){
             List<Livro> livros =new ArrayList<>();
 
             try{
-                livros = service.listarLivros();
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(service.listarLivros());
             }catch (SQLException e){
                 e.printStackTrace();
-            }
-            return ResponseEntity.status(HttpStatus.OK).body(livros);
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
         }
 
         @GetMapping("/{id}")
-        public ResponseEntity<Livro> buscarLivroPorId(@PathVariable int id){
+        public ResponseEntity<CriacaoLivroRespostaDto> buscarLivroPorId(@PathVariable int id){
             Livro newLivro = new Livro();
             try{
-                newLivro = service.listarLivroPorID(id);
+               return ResponseEntity.status(HttpStatus.OK)
+                       .body(service.listarLivroPorID(id));
             }catch (SQLException e){
                 e.printStackTrace();
             }
-            return ResponseEntity.status(HttpStatus.OK).body(newLivro);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
 
         @PutMapping("/{id}")
-        public ResponseEntity<Livro>  atualizarLivro(@PathVariable int id, @RequestBody Livro livro){
+        public ResponseEntity<CriacaoLivroRespostaDto>  atualizarLivro(@PathVariable int id, @RequestBody Livro livro){
             Livro newLivro = new Livro();
             try{
-                newLivro = service.atualizarLivro(id, livro);
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(service.atualizarLivro(id, livro));
             }catch (SQLException e){
                 e.printStackTrace();
             }
-            return ResponseEntity.status(HttpStatus.OK).body(newLivro);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build() ;
         }
 
         @DeleteMapping("/{id}")
-        public ResponseEntity<Void> deletarLivro(@PathVariable int id){
+        public ResponseEntity<CriacaoLivroRespostaDto> deletarLivro(@PathVariable int id){
             Livro newLivro = new Livro();
             try{
-                newLivro = service.deletarLivro(id);
+              service.deletarLivro(id);
+              return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                      .build();
             }catch (SQLException e){
                 e.printStackTrace();
             }
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
